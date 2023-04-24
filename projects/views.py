@@ -24,7 +24,16 @@ def projects(request):
         page = pagiator.num_pages
         parojects = paginator.page(page)
 
-    context = {'projects': projects,'search_query': search_query, 'paginator': paginator}
+    leftindex = (int(page)-4)
+    if leftindex <1:
+        leftindex =1
+
+    rightindex = (int(page)+5)
+    if rightindex > paginator.num_pages:
+        rightindex = paginator.num_pages +1
+    custom_range = (leftindex, rightindex)
+
+    context = {'projects': projects,'search_query': search_query, 'paginator': paginator,'custom_range': custom_range}
     return render(request, "projects.html", context)
 
 def project(request, pk):
@@ -42,14 +51,13 @@ def createproject(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST, request.FILES,)
         if form.is_valid():
-            profile = form.save(commit=False)
+            project = form.save(commit=False)
             project.owner = profile
             project.save()
             return redirect('account')
 
     context ={'form': form,}
     return render(request, "project_form.html", context)
-
 @login_required(login_url="login")
 def updateproject(request, pk ):
     profile = request.user.profile
