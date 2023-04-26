@@ -85,11 +85,11 @@
       <li><a href="?page={{projects.previous_page_number}}" class="btn page-link">&#10094; prev</a></li>
       {% endif %}
       {% for page in custom_range %}
-      {% if page == projects.number %}
-      <li><a href="?page={{page}}" class="btn page-link btn--sub">{{page}}</a></li>
-      {% else %}
-      <li><a href="?page={{page}}" class="btn page-link">{{page}}</a></li>
-      {% endif %}
+        {% if page == projects.number %}
+        <li><a href="?page={{page}}" class="btn page-link btn--sub">{{page}}</a></li>
+        {% else %}
+        <li><a href="?page={{page}}" class="btn page-link">{{page}}</a></li>
+        {% endif %}
       {% endfor %}
       {% if projects.has_next %}
       <li><a href="?page={{projects.next_page_number}}" class="btn page-link">next &#10095;</a></li>
@@ -99,5 +99,5 @@
   {% endif %}
 </main>
 
-gsdrghdhdhs
+
 {% endblock %}
