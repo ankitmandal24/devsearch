@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+
+from django.contrib import messages
 from django.db.models import Q
 from . models import Project, Tag
-from .forms import ProjectForm
+from .forms import ProjectForm,ReviewForm
 from .utils import SearchProject, paginateProjects
 # Create your views here.
 
@@ -17,9 +19,22 @@ def projects(request):
 
 def project(request, pk):
     projectobj = Project.objects.get(id=pk)
-    tags = projectobj.tags.all()
-    print('projectobj:', projectobj)
-    return render(request, "single-project.html",{'project':projectobj,'tags': tags})
+    # tags = projectobj.tags.all()
+    # print('projectobj:', projectobj)
+    form = ReviewForm()
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        review = form.save(commit=False)
+        review.project = projectobj
+        review.owner = request.user.profile
+        review.save()
+
+
+        projectobj.getvotecount
+
+        messages.success(request,'Your review has successfully submitted')
+        return redirect('project', pk=projectobj.id)
+    return render(request, "single-project.html",{'project':projectobj,'form': form})
 
 @login_required(login_url="login")
 def createproject(request):
